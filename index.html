@@ -3,10 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>منصة شركة Amr Group - النسخة الرئاسية المؤمنة</title>
+<title>منصة شركة Amr Group - النسخة الرئاسية المؤمنة الشاملة</title>
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -157,7 +158,7 @@ th { background: #0a192f; color: #64ffda; }
 </div>
 
 <div id="calc-modal">
-    <input type="text" id="calc-screen" readonly style="width:92%; margin-bottom:10px; height:40px; background:#000; color:var(--s); border:none; font-size: 20px;">
+    <input type="text" id="calc-screen" readonly style="width:92%; margin-bottom:10px; height:40px; background:#000; color:var(--s); border:none; font-size: 20px; text-align: center;">
     <div class="calc-grid">
         <button class="calc-btn" onclick="clearCalc()">C</button>
         <button class="calc-btn" onclick="addCalc('/')">/</button>
@@ -204,6 +205,7 @@ th { background: #0a192f; color: #64ffda; }
   <div class="card">
     <h3>🔄 العمليات الكبرى والتقارير الرئاسية</h3>
     <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 5px;">
+        <button class="btn btn-main" style="background: #10b981; color: #fff;" onclick="exportStudentsExcel()">📊 تنزيل تقرير بأسماء الأكواد والطلاب المقيدين (Excel)</button>
         <button class="btn btn-main" style="background: #a855f7; color: #fff;" onclick="renewAllCodesPDF()">🔄 تحديث أكواد الطلاب وتنزيل كشف الـ PDF</button>
         <button class="btn btn-main" style="background: #3b82f6; color: #fff;" onclick="printResultsPDF()">📜 طباعة وتنزيل تقرير النتائج (PDF)</button>
         <button class="btn btn-danger" onclick="clearAllResults()">🗑️ تصفير ومسح جميع النتائج</button>
@@ -349,7 +351,7 @@ function addNewStudentManual() {
         alert(`تمت إضافة الطالب بنجاح!\nالكود الخاص به: ${code}`);
         document.getElementById('new-student-name').value = '';
         document.getElementById('new-student-class').value = '';
-    }).catch(() => alert("خطأ في صلاحيات السيرفر."));
+    }).catch(() => alert("خطأ! تأكد من صلاحيات الـ Rules في السيرفر أو تسجيل دخول الأدمن أولاً."));
 }
 
 function deleteStudent(code) {
@@ -389,6 +391,13 @@ function renewAllCodesPDF() {
     }
 }
 
+function exportStudentsExcel() {
+    let table = document.getElementById('admin-students-table');
+    if (!table || table.rows.length <= 1) { alert("لا توجد بيانات طلاب لتصديرها حالياً!"); return; }
+    let wb = XLSX.utils.table_to_book(table, { sheet: "كشف كشوف الطلاب" });
+    XLSX.writeFile(wb, "كشف_طلاب_وأكواد_Amr_Group.xlsx");
+}
+
 function printResultsPDF() {
     let arr = []; for(let k in globalResultsObject) { arr.push(globalResultsObject[k]); }
     if(arr.length === 0) { alert("لا توجد نتائج لطباعتها!"); return; }
@@ -415,7 +424,7 @@ function printResultsPDF() {
 }
 
 function clearAllResults() { if(confirm("هل أنت متأكد من مسح النتائج؟")) { db.ref('shousha/results').remove(); } }
-function clearAllStudents() { if(confirm("هل أنت متأكد من مسح جميع الطلاب Momken؟")) { db.ref('shousha/mapping').remove(); } }
+function clearAllStudents() { if(confirm("هل أنت متأكد من مسح جميع الطلاب؟")) { db.ref('shousha/mapping').remove(); } }
 
 function studentLogin() {
     const code = document.getElementById('entry-code').value.toUpperCase().trim();
