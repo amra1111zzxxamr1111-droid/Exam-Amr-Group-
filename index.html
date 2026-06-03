@@ -3,11 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>منصة شركة Amr Group - النسخة الرئاسية المؤمنة الشاملة</title>
+<title>منصة شركة Amr Group - النسخة الرسمية المعتمدة</title>
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -37,8 +36,7 @@ header {
 .card { 
     background: var(--card); padding: 20px; border-radius: 12px; 
     border: 1px solid var(--border); margin: 20px auto; width: 90%; max-width: 850px;
-    box-shadow: 0 20px 30px rgba(2,12,27,0.5);
-    box-sizing: border-box;
+    box-shadow: 0 20px 30px rgba(2,12,27,0.5); box-sizing: border-box;
 }
 
 input, textarea, select {
@@ -81,8 +79,7 @@ input[type="radio"] { margin-left: 15px; min-width: 22px; min-height: 22px; curs
 }
 .notice-box {
     background: var(--card); width: 100%; max-width: 600px; padding: 30px; border-radius: 15px;
-    border: 3px solid var(--s); box-shadow: 0 0 50px rgba(100,255,218,0.3);
-    box-sizing: border-box;
+    border: 3px solid var(--s); box-shadow: 0 0 50px rgba(100,255,218,0.3); box-sizing: border-box;
 }
 
 #calc-modal { 
@@ -95,14 +92,12 @@ input[type="radio"] { margin-left: 15px; min-width: 22px; min-height: 22px; curs
 .calc-btn:hover { background: var(--s); color: #000; }
 
 #admin-panel { display: none; position: fixed; inset: 0; background: var(--bg); z-index: 1000; overflow-y: auto; padding: 15px; }
-.table-responsive { width: 100%; overflow-x: auto; margin-top: 15px; border-radius: 8px; -webkit-overflow-scrolling: touch; }
+.table-responsive { width: 100%; overflow-x: auto; margin-top: 15px; border-radius: 8px; }
 table { width: 100%; border-collapse: collapse; background: #ffffff; color: #020c1b; min-width: 600px; }
 th, td { border: 1px solid #ccd6f6; padding: 10px; text-align: center; font-weight: 600; font-size: 14px; }
 th { background: #0a192f; color: #64ffda; }
 
-.badge-top { background: #ffde59; color: #000; padding: 3px 8px; border-radius: 6px; font-weight: 800; font-size: 12px; }
 .badge-cheat { background: #f53b57; color: #fff; padding: 4px 8px; border-radius: 6px; font-weight: 800; font-size: 12px; display: inline-block; animation: blink 1s infinite; }
-
 @keyframes blink { 50% { opacity: 0.5; } }
 
 @media (max-width: 600px) {
@@ -111,28 +106,21 @@ th { background: #0a192f; color: #64ffda; }
     .btn { padding: 10px 14px; font-size: 13px; }
     .card { padding: 15px; width: 95%; }
 }
-
-@media print { 
-    .no-print { display: none !important; } 
-    #print-area { display: block !important; background: white !important; color: black !important; } 
-    table { width: 100%; border: 1px solid black; font-size: 14px; }
-    th { background: #eee !important; color: #000 !important; }
-}
 </style>
 </head>
 <body id="body-tag" data-theme="dark">
 
-<header class="no-print">
+<header>
   <div onclick="openAdmin()" style="cursor:pointer"><h2 class="header-logo">🛡️ Amr Group</h2></div>
   <div style="display:flex; gap:5px; flex-wrap: wrap; justify-content: center;">
     <button class="btn btn-dark" onclick="toggleTheme()">🌓 اللون</button>
     <button class="btn btn-dark" onclick="zoom(1.1)">🔍+</button>
     <button class="btn btn-dark" onclick="zoom(0.9)">🔍-</button>
-    <button class="btn btn-main" onclick="toggleCalc()">🖩 الحاسبة</button>
+    <button class="btn btn-main" onclick="toggleCalc('block')">🖩 الحاسبة</button>
   </div>
 </header>
 
-<div class="no-print">
+<div>
   <div id="login-screen" class="card" style="text-align: center; margin-top: 5vh;">
     <h1 style="color:var(--s); font-size: 32px; font-weight: 900; margin-bottom: 5px;">Amr Group</h1>
     <p style="color: var(--gray); margin-bottom: 25px; font-size: 15px;">البوابة الرسمية للاختبارات المهنية المعتمدة</p>
@@ -177,10 +165,10 @@ th { background: #0a192f; color: #64ffda; }
         <button class="calc-btn" onclick="addCalc('3')">3</button>
         <button class="calc-btn" onclick="addCalc('0')">0</button>
     </div>
-    <button class="btn btn-danger" onclick="toggleCalc()" style="width:100%; margin-top:10px;">إغلاق</button>
+    <button class="btn btn-danger" onclick="toggleCalc('none')" style="width:100%; margin-top:10px;">إغلاق</button>
 </div>
 
-<div id="admin-panel" class="no-print">
+<div id="admin-panel">
   <div style="display:flex; justify-content:space-between; align-items:center; border-bottom: 2px solid var(--border); padding-bottom: 15px; flex-wrap: wrap; gap: 10px;">
       <h1 style="color: var(--s); margin: 0; font-size: 22px;">🎛️ لوحة القيادة العامة | Amr Group</h1>
       <button class="btn btn-danger" onclick="closeAdmin()">إغلاق اللوحة ✖</button>
@@ -190,7 +178,7 @@ th { background: #0a192f; color: #64ffda; }
     <h3>⚙️ إدارة محتوى وبيانات الاختبار</h3>
     <input type="text" id="adm-subject" placeholder="اسم المادة / الدورة التدريبية">
     <input type="number" id="adm-time" placeholder="الوقت المتاح لحل الامتحان (بالدقائق)">
-    <textarea id="adm-notice" placeholder="اكتب هنا رسالة التنويه المهمة التي تظهر للطالب لمدة 5 ثوانٍ قبل الامتحان..." style="height: 80px; text-align: right;"></textarea>
+    <textarea id="adm-notice" placeholder="اكتب هنا رسالة التنويه المهمة التي تظهر للطالب..." style="height: 80px; text-align: right;"></textarea>
     <textarea id="adm-questions" placeholder="صيغة الأسئلة: السؤال|الاختيار1|الاختيار2|الاختيار3|الاختيار4|الإجابة الصحيحة" style="height:120px; text-align: right;"></textarea>
     <button class="btn btn-main" onclick="updateExam()" style="width:100%; margin: 10px 0 0 0;">حفظ وتحديث نظام الاختبار والتعليمات 💾</button>
   </div>
@@ -203,13 +191,12 @@ th { background: #0a192f; color: #64ffda; }
   </div>
 
   <div class="card">
-    <h3>🔄 العمليات الكبرى والتقارير الرئاسية</h3>
+    <h3>🔄 التقارير والتحديثات الكبرى (تنزيل PDF تلقائي)</h3>
     <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 5px;">
-        <button class="btn btn-main" style="background: #10b981; color: #fff;" onclick="exportStudentsExcel()">📊 تنزيل تقرير بأسماء الأكواد والطلاب المقيدين (Excel)</button>
-        <button class="btn btn-main" style="background: #a855f7; color: #fff;" onclick="renewAllCodesPDF()">🔄 تحديث أكواد الطلاب وتنزيل كشف الـ PDF</button>
-        <button class="btn btn-main" style="background: #3b82f6; color: #fff;" onclick="printResultsPDF()">📜 طباعة وتنزيل تقرير النتائج (PDF)</button>
-        <button class="btn btn-danger" onclick="clearAllResults()">🗑️ تصفير ومسح جميع النتائج</button>
-        <button class="btn btn-danger" onclick="clearAllStudents()">🚨 حذف جميع كشوف الطلاب</button>
+        <button class="btn btn-main" style="background: #a855f7; color: #fff;" onclick="renewAllCodesPDF()">🔄 تحديث أكواد الطلاب وتنزيل كشف الأكواد (PDF)</button>
+        <button class="btn btn-main" style="background: #3b82f6; color: #fff;" onclick="printResultsPDF()">📜 تنزيل تقرير النتائج والدرجات النهائي المعتمد (PDF)</button>
+        <button class="btn btn-danger" onclick="clearAllResults()">🗑️ تصفير ومسح جميع نتائج الطلاب</button>
+        <button class="btn btn-danger" onclick="clearAllStudents()">🚨 حذف جميع كشوف الطلاب المقيدين</button>
     </div>
   </div>
 
@@ -233,10 +220,6 @@ th { background: #0a192f; color: #64ffda; }
         </table>
     </div>
   </div>
-</div>
-
-<div id="print-area" style="display:none; direction:rtl; padding:20px;">
-  <div id="print-content-target"></div>
 </div>
 
 <script>
@@ -273,15 +256,13 @@ function toggleTheme() {
     b.setAttribute('data-theme', b.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
 }
 
-function toggleCalc() { const m = document.getElementById('calc-modal'); m.style.display = (m.style.display==='block')?'none':'block'; }
+function toggleCalc(status) { document.getElementById('calc-modal').style.display = status; }
 function addCalc(v) { document.getElementById('calc-screen').value += v; }
 function clearCalc() { document.getElementById('calc-screen').value = ''; }
 function calcRes() { 
     try { 
         let expression = document.getElementById('calc-screen').value;
-        if(expression) {
-            document.getElementById('calc-screen').value = eval(expression); 
-        }
+        if(expression) { document.getElementById('calc-screen').value = eval(expression); }
     } catch(e) { alert("خطأ في العملية"); } 
 }
 
@@ -351,23 +332,21 @@ function addNewStudentManual() {
         alert(`تمت إضافة الطالب بنجاح!\nالكود الخاص به: ${code}`);
         document.getElementById('new-student-name').value = '';
         document.getElementById('new-student-class').value = '';
-    }).catch(() => alert("خطأ! تأكد من صلاحيات الـ Rules في السيرفر أو تسجيل دخول الأدمن أولاً."));
+    }).catch(() => alert("خطأ في الصلاحيات."));
 }
 
 function deleteStudent(code) {
-    if(confirm("هل أنت متأكد من حذف هذا الطالب؟")) {
-        db.ref('shousha/mapping/' + code).remove();
-    }
+    if(confirm("هل أنت متأكد من حذف هذا الطالب؟")) { db.ref('shousha/mapping/' + code).remove(); }
 }
 
 function renewAllCodesPDF() {
-    if(confirm("هل تريد توليد أكواد جديدة لجميع الطلاب وتصديرها كـ PDF؟")) {
+    if(confirm("هل تريد توليد أكواد جديدة تماماً وتنزيل كشف الـ PDF الفوري؟")) {
         const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
         let newUpdates = {}; let studentList = [];
         for (let oldCode in globalStudentsObject) {
             studentList.push({ name: globalStudentsObject[oldCode].name, class: globalStudentsObject[oldCode].class });
         }
-        if(studentList.length === 0) { alert("لا يوجد طلاب مقيدين!"); return; }
+        if(studentList.length === 0) { alert("لا يوجد طلاب مقيدين حالياً بالمنصة لتوليد أكواد لهم!"); return; }
 
         studentList.forEach(st => {
             let newCode = "";
@@ -379,52 +358,62 @@ function renewAllCodesPDF() {
 
         db.ref('shousha/mapping').remove().then(() => {
             db.ref().update(newUpdates).then(() => {
-                let hPrint = `<h2 style="text-align:center;">كشف أكواد الدخول المحدثة - شركة Amr Group</h2><table style="width:100%; border-collapse:collapse;" border="1"><thead><tr><th>م</th><th>اسم الطالب</th><th>المجموعة</th><th>الكود الجديد</th></tr></thead><tbody>`;
                 let sortedArr = []; for (let kc in newUpdates) { sortedArr.push({ ...newUpdates[kc], code: kc.replace('shousha/mapping/', '') }); }
                 sortedArr.sort((a,b) => a.class.localeCompare(b.class) || a.name.localeCompare(b.name));
-                sortedArr.forEach((st, idx) => { hPrint += `<tr><td>${idx+1}</td><td style="text-align:right; padding-right:10px;">${st.name}</td><td>${st.class}</td><td style="font-weight:bold; color:blue;">${st.code}</td></tr>`; });
-                hPrint += `</tbody></table>`;
-                document.getElementById('print-content-target').innerHTML = hPrint;
-                window.print();
+
+                let pWin = window.open('', '_blank');
+                let html = `<html dir="rtl"><head><title>كشف الأكواد الرسمي</title><style>body{font-family:'Cairo',sans-serif;padding:30px;background:#fff;color:#000;}.stamp{border:3px dashed #000; color:#000; padding:10px; display:inline-block; font-weight:bold; margin-top:15px;}table{width:100%;border-collapse:collapse;margin-top:20px;}th,td{border:1px solid #000;padding:12px;text-align:center;}th{background:#f2f2f2;}</style></head><body>`;
+                html += `<div style="text-align:center;"><h2>📋 كشف الأكواد السري المعتمد والجديد</h2><h3>صادر عن: Amr Group للتدريب والتعليم</h3></div>`;
+                html += `<table><thead><tr><th>م</th><th>اسم الطالب رباعي</th><th>المجموعة / الفصل</th><th>كود الدخول المعتمد</th></tr></thead><tbody>`;
+                sortedArr.forEach((st, idx) => { 
+                    html += `<tr><td>${idx+1}</td><td style="text-align:right; padding-right:15px;">${st.name}</td><td>${st.class}</td><td style="font-weight:bold; font-size:16px;">${st.code}</td></tr>`; 
+                });
+                html += `</tbody></table><div style="text-align:left; margin-top:30px;"><div class="stamp">🔒 خِتم المنصة الرسمي<br>AMR GROUP SECURITY</div></div>`;
+                html += `<script>window.onload = function() { window.print(); window.close(); };<\/script></body></html>`;
+                pWin.document.write(html); pWin.document.close();
             });
         });
     }
 }
 
-function exportStudentsExcel() {
-    let table = document.getElementById('admin-students-table');
-    if (!table || table.rows.length <= 1) { alert("لا توجد بيانات طلاب لتصديرها حالياً!"); return; }
-    let wb = XLSX.utils.table_to_book(table, { sheet: "كشف كشوف الطلاب" });
-    XLSX.writeFile(wb, "كشف_طلاب_وأكواد_Amr_Group.xlsx");
-}
-
 function printResultsPDF() {
     let arr = []; for(let k in globalResultsObject) { arr.push(globalResultsObject[k]); }
-    if(arr.length === 0) { alert("لا توجد نتائج لطباعتها!"); return; }
+    if(arr.length === 0) { alert("لا توجد نتائج مسجلة لطباعتها وتنزيلها!"); return; }
     arr.sort((a, b) => (parseInt(b.score.split('/')[0]) || 0) - (parseInt(a.score.split('/')[0]) || 0));
 
-    let hPrint = `<div style="text-align:center; direction:rtl;"><h1 style="margin:0;">👑 تقرير بيان الدرجات والنتائج النهائي المعتمد</h1><h3 style="color:#555;">صادر عن شركة Amr Group</h3><table style="width:100%; border-collapse:collapse; margin-top:15px;" border="1"><thead><tr><th>الترتيب</th><th>اسم الطالب رباعي</th><th>المجموعة</th><th>النتيجة</th><th>تنويه وتكريم المركز</th></tr></thead><tbody>`;
+    let pWin = window.open('', '_blank');
+    let html = `<html dir="rtl"><head><title>تقرير بيان الدرجات والنتائج النهائي</title><style>body{font-family:'Cairo',sans-serif;padding:30px;background:#fff;color:#000;}.stamp-box{border:4px double red; color:red; padding:15px; display:inline-block; font-weight:900; font-size:14px; text-align:center; border-radius:10px;}table{width:100%;border-collapse:collapse;margin-top:25px;}th,td{border:1px solid #000;padding:12px;text-align:center;}th{background:#e6e6e6;}</style></head><body>`;
+    html += `<div style="text-align:center;"><h1>👑 كشف بيان الدرجات والنتائج النهائي المعتمد</h1><h3 style="color:#444;">صادر وتلقائي من نظام حماية ومراقبة Amr Group</h3></div>`;
+    html += `<table><thead><tr><th>الترتيب</th><th>اسم الطالب رباعي</th><th>المجموعة/الفصل</th><th>النتيجة الإجمالية</th><th>تنويه وحالة الاعتماد الرسمية</th></tr></thead><tbody>`;
 
     arr.forEach((st, idx) => {
-        let rank = idx + 1; let rankBadge = `${rank}`; let certMessage = "";
-        
-        if (st.cheat === true) {
-            certMessage = "🚨 محاولة غش مُسجلة! تم حظر الطالب من الشهادة المعتمدة لانتهاك السياسات الأكاديمية.";
-            rankBadge = `<span style="color:red; font-weight:900;">محظور</span>`;
-        } else if(rank === 1) { rankBadge = `🥇 الأول`; certMessage = "خذ اسكرين وارسلها للمسؤول لتستلم شهادتك التي تؤهلك لإي مكان عمل شهاده معتمده من شركة Amr Group"; }
-        else if(rank === 2) { rankBadge = `🥈 الثاني`; certMessage = "خذ اسكرين وارسلها للمسؤول لتستلم شهادتك التي تؤهلك لإي مكان عمل شهاده معتمده من شركة Amr Group"; }
-        else if(rank === 3) { rankBadge = `🥉 الثالث`; certMessage = "خذ اسكرين وارسلها للمسؤول لتستلم شهادتك التي تؤهلك لإي مكان عمل شهاده معتمده من شركة Amr Group"; }
-        else { certMessage = "تم تسليم الإجابات بنجاح واعتمادها."; }
+        let rank = idx + 1; let rBadge = `${rank}`; let msg = "تم تسليم الإجابات بنجاح واعتمادها بالمنظومة.";
+        if (st.cheat === true) { rBadge = `<span style="color:red; font-weight:bold;">محظور</span>`; msg = "🚨 محاولة غش مرصودة وموثقة! تم سحب الشهادة تلقائياً."; }
+        else if(rank === 1) { rBadge = `🥇 الأول`; msg = "🏆 خذ لقطة شاشة وأرسلها للمسؤول لتستلم مكافأتك وشهادتك الفاخرة المعتمدة."; }
+        else if(rank === 2) { rBadge = `🥈 الثاني`; msg = "🏆 خذ لقطة شاشة وأرسلها للمسؤول لتستلم مكافأتك وشهادتك الفاخرة المعتمدة."; }
+        else if(rank === 3) { rBadge = `🥉 الثالث`; msg = "🏆 خذ لقطة شاشة وأرسلها للمسؤول لتستلم مكافأتك وشهادتك الفاخرة المعتمدة."; }
 
-        hPrint += `<tr><td>${rankBadge}</td><td style="text-align:right; padding-right:10px; font-weight:bold;">${st.name}</td><td>${st.class}</td><td style="font-weight:bold; color:${st.cheat?'red':'green'};">${st.score}</td><td style="font-size:12px; color:${st.cheat?'red':'#c0392b'}; font-weight:bold;">${certMessage}</td></tr>`;
+        html += `<tr><td style="font-weight:bold;">${rBadge}</td><td style="text-align:right; padding-right:15px; font-weight:bold;">${st.name}</td><td>${st.class}</td><td style="font-weight:bold; font-size:16px; color:${st.cheat?'red':'green'};">${st.score}</td><td style="font-size:13px; font-weight:bold; color:${st.cheat?'red':'#333'};">${msg}</td></tr>`;
     });
-    hPrint += `</tbody></table></div>`;
-    document.getElementById('print-content-target').innerHTML = hPrint;
-    window.print();
+    
+    html += `</tbody></table><div style="display:flex; justify-content:space-between; margin-top:50px; align-items:center;"><div><p>التوقيع الإلكتروني للمدير العام: <b>م/ عمرو شوشة</b></p></div><div class="stamp-box">👑 مَنصة Amr Group للتدريب<br>مُعتمد ومَختوم إلكترونياً<br>OFFICIAL VERIFIED STAMP</div></div>`;
+    html += `<script>window.onload = function() { window.print(); window.close(); };<\/script></body></html>`;
+    pWin.document.write(html); pWin.document.close();
 }
 
-function clearAllResults() { if(confirm("هل أنت متأكد من مسح النتائج؟")) { db.ref('shousha/results').remove(); } }
-function clearAllStudents() { if(confirm("هل أنت متأكد من مسح جميع الطلاب؟")) { db.ref('shousha/mapping').remove(); } }
+function clearAllResults() {
+    if(confirm("🚨 تنبيه خطير: هل أنت متأكد تماماً من تصفير ومسح جميع نتائج الطلاب بالكامل؟ لا يمكن التراجع!")) {
+        db.ref('shousha/results').remove()
+        .then(() => { alert("🚀 تم تصفير ومسح جدول النتائج بنجاح تام والمنصة الآن خالية من أي درجات."); })
+        .catch((err) => { alert("حدث خطأ أثناء المسح: " + err.message); });
+    }
+}
+
+function clearAllStudents() { 
+    if(confirm("هل أنت متأكد من مسح جميع الطلاب نهائياً؟")) { 
+        db.ref('shousha/mapping').remove().then(() => alert("تم مسح الكشوف.")); 
+    } 
+}
 
 function studentLogin() {
     const code = document.getElementById('entry-code').value.toUpperCase().trim();
@@ -435,11 +424,9 @@ function studentLogin() {
             window.user = s.val();
             db.ref('shousha/config').once('value', snap => {
                 const conf = snap.val() || {};
-                const noticeText = conf.notice || "تنبيه: يرجى التركيز وعدم مغادرة الصفحة لتفادي القفل التلقائي ورصد محاولة الغش.";
-                document.getElementById('notice-text-content').innerText = noticeText;
+                document.getElementById('notice-text-content').innerText = conf.notice || "تنبيه: يرجى التركيز وعدم مغادرة الصفحة لتفادي القفل التلقائي.";
                 
-                const modal = document.getElementById('notice-modal');
-                modal.style.display = 'flex';
+                const modal = document.getElementById('notice-modal'); modal.style.display = 'flex';
                 let countdown = 5; const btn = document.getElementById('notice-close-btn'); btn.disabled = true;
                 
                 let timer = setInterval(() => {
@@ -456,7 +443,7 @@ function studentLogin() {
                     }
                 }, 1000);
             });
-        } else { alert("الكود غير صحيح أو تم تحديثه للاختبار الحالي!"); }
+        } else { alert("الكود غير صحيح أو منتهي الصلاحية للاختبار الحالي!"); }
     });
 }
 
@@ -491,11 +478,8 @@ function submitExam() {
         });
         
         db.ref('shousha/results/' + window.user.name).set({
-            name: window.user.name, 
-            class: window.user.class, 
-            score: score + "/" + conf.qs.length, 
-            time: new Date().toLocaleTimeString(),
-            cheat: isCheater
+            name: window.user.name, class: window.user.class, 
+            score: score + "/" + conf.qs.length, time: new Date().toLocaleTimeString(), cheat: isCheater
         }).then(() => { 
             alert(isCheater ? "تم تسليم الامتحان تلقائياً ورصد مخالفة أمنية غش." : "تم حفظ إجاباتك واحتساب الدرجة الكلية بنجاح."); 
             location.reload(); 
@@ -511,13 +495,16 @@ function updateExam() {
     
     if(!sub || !time || !qsData) { alert("يرجى ملء جميع حقول المادة والوقت والأسئلة!"); return; }
     
-    const qs = qsData.split('\n').map(l => { 
+    const lines = qsData.split('\n').filter(l => l.trim() !== "" && l.includes('|'));
+    const qs = lines.map(l => { 
         const p = l.split('|'); 
         return { text: p[0], opts: [p[1], p[2], p[3], p[4]], correct: p[5] }; 
     });
     
+    if(qs.length === 0){ alert("صيغة الأسئلة المكتوبة غير صحيحة!"); return; }
+
     db.ref('shousha/config').set({ subject: sub, time: time, notice: notice, qs: qs })
-    .then(() => alert("تم تحديث بنود السيرفر المعتمدة وحفظ الأسئلة بنجاح!"))
+    .then(() => alert("تم تحديث السيرفر المعتمد وحفظ الأسئلة بنجاح!"))
     .catch(() => alert("فشل الاتصال بقاعدة البيانات."));
 }
 
@@ -532,7 +519,7 @@ document.addEventListener('visibilitychange', () => {
         if (cheatAttempts >= 2) {
             alert("لقد غادرت نافذة الاختبار مرتين! تم قفل الامتحان وإرسال ورقتك فوراً بعلامة غش مُسجلة.");
             submitExam();
-        } else { alert("⚠️ تحذير صارم: ممنوع فتح نوافذ أخرى. تكرار المخالفة سيلغي امتحانك ويسجلك كـ غاش فوراً في السيرفر!"); }
+        } else { alert("⚠️ تحذير صارم: ممنوع فتح نوافذ أخرى. تكرار المخالفة سيلغي امتحانك فوراً!"); }
     }
 });
 </script>
