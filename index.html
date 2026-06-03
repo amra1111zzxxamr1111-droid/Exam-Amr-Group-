@@ -338,7 +338,7 @@ function deleteStudent(code) {
     }
 }
 
-// دالة توليد الأكواد وحذف الصفحة البيضاء نهائياً بالحقن المباشر
+// دالة توليد الأكواد وإصلاح خطوط الرندرة لملف الـ PDF
 function renewAllCodesPDF() {
     if(confirm("هل تريد توليد أكواد جديدة تماماً وتنزيل كشف الـ PDF المباشر والمليء بالبيانات؟")) {
         const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
@@ -361,29 +361,31 @@ function renewAllCodesPDF() {
                 let sortedArr = []; for (let kc in newUpdates) { sortedArr.push({ ...newUpdates[kc], code: kc.replace('shousha/mapping/', '') }); }
                 sortedArr.sort((a,b) => a.class.localeCompare(b.class) || a.name.localeCompare(b.name));
 
-                // إنشاء عنصر مرئي مؤقتاً في أعلى الصفحة لضمان قراءته بشكل كامل بنسبة 100% من المحرك
                 let tempContainer = document.createElement('div');
+                // تغيير الخط هنا لخطوط نظام صريحة ومباشرة لمنع الصفحة البيضاء
+                tempContainer.style.fontFamily = "Arial, sans-serif"; 
                 tempContainer.style.background = "#ffffff";
                 tempContainer.style.color = "#000000";
-                tempContainer.style.padding = "30px";
-                tempContainer.style.width = "750px"; 
+                tempContainer.style.padding = "20px";
+                tempContainer.style.width = "700px"; 
                 tempContainer.style.position = "absolute";
-                tempContainer.style.top = "-5000px"; // وضعه بعيداً لكي لا يشوش على الشاشة ولكن يقرأه المتصفح كـ HTML حقيقي كامل الحجم
+                tempContainer.style.top = "-9999px"; 
+                tempContainer.style.left = "-9999px";
                 tempContainer.style.direction = "rtl";
 
                 let htmlContent = `
-                    <div style="font-family:'Cairo', sans-serif; text-align:right;">
-                        <div style="text-align:center; border-bottom:3px solid #0a192f; padding-bottom:10px; margin-bottom:20px;">
-                            <h2 style="margin:0; color:#0a192f;">📋 كشف أكواد الدخول السرية الجديدة للطلاب</h2>
+                    <div style="text-align:right;">
+                        <div style="text-align:center; border-bottom:3px solid #000000; padding-bottom:10px; margin-bottom:20px;">
+                            <h2 style="margin:0; color:#000000;">📋 كشف أكواد الدخول السرية الجديدة للطلاب</h2>
                             <h4 style="margin:5px 0 0 0; color:#555;">صادر وتلقائي عن: Amr Group للتعليم المطور</h4>
                         </div>
                         <table style="width:100%; border-collapse:collapse; margin-top:15px; font-size:14px; background:#ffffff; color:#000000;">
                             <thead>
-                                <tr style="background:#f2f2f2; color:#0a192f;">
-                                    <th style="border:1px solid #111111; padding:12px; text-align:center; width:50px; font-weight:bold;">م</th>
-                                    <th style="border:1px solid #111111; padding:12px; text-align:right; font-weight:bold;">اسم الطالب رباعي</th>
-                                    <th style="border:1px solid #111111; padding:12px; text-align:center; font-weight:bold;">المجموعة / الفصل</th>
-                                    <th style="border:1px solid #111111; padding:12px; text-align:center; width:150px; font-weight:bold;">كود الدخول الجديد</th>
+                                <tr style="background:#f2f2f2; color:#000000;">
+                                    <th style="border:1px solid #000000; padding:12px; text-align:center; width:50px; font-weight:bold;">م</th>
+                                    <th style="border:1px solid #000000; padding:12px; text-align:right; font-weight:bold;">اسم الطالب رباعي</th>
+                                    <th style="border:1px solid #000000; padding:12px; text-align:center; font-weight:bold;">المجموعة / الفصل</th>
+                                    <th style="border:1px solid #000000; padding:12px; text-align:center; width:150px; font-weight:bold;">كود الدخول الجديد</th>
                                 </tr>
                             </thead>
                             <tbody>`;
@@ -391,10 +393,10 @@ function renewAllCodesPDF() {
                 sortedArr.forEach((st, idx) => { 
                     htmlContent += `
                     <tr>
-                        <td style="border:1px solid #111111; padding:10px; text-align:center;">${idx+1}</td>
-                        <td style="border:1px solid #111111; padding:10px; text-align:right; font-weight:bold; color:#000;">${st.name}</td>
-                        <td style="border:1px solid #111111; padding:10px; text-align:center; color:#000;">${st.class}</td>
-                        <td style="border:1px solid #111111; padding:10px; text-align:center; font-weight:bold; color:#0056b3; font-size:15px;">${st.code}</td>
+                        <td style="border:1px solid #000000; padding:10px; text-align:center;">${idx+1}</td>
+                        <td style="border:1px solid #000000; padding:10px; text-align:right; font-weight:bold; color:#000000;">${st.name}</td>
+                        <td style="border:1px solid #000000; padding:10px; text-align:center; color:#000000;">${st.class}</td>
+                        <td style="border:1px solid #000000; padding:10px; text-align:center; font-weight:bold; color:#0056b3; font-size:15px;">${st.code}</td>
                     </tr>`; 
                 });
                 
@@ -403,7 +405,7 @@ function renewAllCodesPDF() {
                         </table>
                         <div style="margin-top:50px; display:flex; justify-content:space-between; align-items:center;">
                             <p style="font-size:13px; color:#333;">تاريخ تحديث الملف تلقائياً: ${new Date().toLocaleDateString('ar-EG')}</p>
-                            <div style="border:3px dashed red; color:red; padding:10px 20px; font-weight:bold; font-size:13px; border-radius:6px; text-align:center; background:#fff5f5;">
+                            <div style="border:2px dashed red; color:red; padding:10px 20px; font-weight:bold; font-size:13px; border-radius:6px; text-align:center; background:#fff5f5;">
                                 🔒 خِتم المنصة الرسمي المعتمد<br>AMR GROUP SECURITY
                             </div>
                         </div>
@@ -416,48 +418,50 @@ function renewAllCodesPDF() {
                     margin:       15,
                     filename:     'كشف_أكواد_الطلاب_الجديد_Amr_Group.pdf',
                     image:        { type: 'jpeg', quality: 1.0 },
-                    html2canvas:  { scale: 2, useCORS: true },
+                    html2canvas:  { scale: 2, useCORS: true, logging: false },
                     jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
                 };
                 
                 html2pdf().set(opt).from(tempContainer).save().then(() => {
-                    document.body.removeChild(tempContainer); // تدمير العنصر تماماً بعد التنزيل المباشر
-                    alert("✅ تم توليد الأكواد بنجاح، وتحميل ملف الـ PDF كاملاً بالبيانات!");
+                    document.body.removeChild(tempContainer); 
+                    alert("✅ تم توليد الأكواد بنجاح، وتحميل ملف الـ PDF كاملاً بالبيانات بدون أسطر فارغة!");
                 });
             });
         });
     }
 }
 
-// دالة تنزيل تقرير نتائج الطلاب والدرجات بدون صفحات بيضاء ونهائية ومجربة
+// دالة تنزيل تقرير نتائج الطلاب والدرجات وإصلاح مشكلة الخطوط نهائياً
 function printResultsPDF() {
     let arr = []; for(let k in globalResultsObject) { arr.push(globalResultsObject[k]); }
     if(arr.length === 0) { alert("لا توجد نتائج مسجلة وموثقة لتصديرها حالياً!"); return; }
     arr.sort((a, b) => (parseInt(b.score.split('/')[0]) || 0) - (parseInt(a.score.split('/')[0]) || 0));
 
     let tempContainer = document.createElement('div');
+    tempContainer.style.fontFamily = "Arial, sans-serif"; 
     tempContainer.style.background = "#ffffff";
     tempContainer.style.color = "#000000";
-    tempContainer.style.padding = "30px";
-    tempContainer.style.width = "750px"; 
+    tempContainer.style.padding = "20px";
+    tempContainer.style.width = "700px"; 
     tempContainer.style.position = "absolute";
-    tempContainer.style.top = "-5000px"; 
+    tempContainer.style.top = "-9999px"; 
+    tempContainer.style.left = "-9999px";
     tempContainer.style.direction = "rtl";
 
     let htmlContent = `
-    <div style="font-family:'Cairo', sans-serif; text-align:right;">
-        <div style="text-align:center; border-bottom:4px double #0a192f; padding-bottom:12px; margin-bottom:25px;">
-            <h1 style="margin:0; color:#0a192f; font-size:24px;">👑 بيان كشف الدرجات والنتائج النهائي المعتمد</h1>
+    <div style="text-align:right;">
+        <div style="text-align:center; border-bottom:4px double #000000; padding-bottom:12px; margin-bottom:25px;">
+            <h1 style="margin:0; color:#000000; font-size:24px;">👑 بيان كشف الدرجات والنتائج النهائي المعتمد</h1>
             <h3 style="margin:5px 0 0 0; color:#7d2ae8; font-size:15px;">مُستخرج ومحمي بالكامل عبر النظام المطور لشركة Amr Group</h3>
         </div>
         <table style="width:100%; border-collapse:collapse; margin-top:15px; font-size:13px; background:#ffffff; color:#000000;">
             <thead>
-                <tr style="background:#0a192f; color:#ffffff;">
-                    <th style="border:1px solid #111111; padding:11px; text-align:center; width:70px;">الترتيب</th>
-                    <th style="border:1px solid #111111; padding:11px; text-align:right;">اسم الطالب رباعي</th>
-                    <th style="border:1px solid #111111; padding:11px; text-align:center;">المجموعة/الفصل</th>
-                    <th style="border:1px solid #111111; padding:11px; text-align:center; width:100px;">النتيجة الكلية</th>
-                    <th style="border:1px solid #111111; padding:11px; text-align:center;">حالة الاعتماد الرسمية المعتمدة للنتيجة</th>
+                <tr style="background:#000000; color:#ffffff;">
+                    <th style="border:1px solid #000000; padding:11px; text-align:center; width:70px;">الترتيب</th>
+                    <th style="border:1px solid #000000; padding:11px; text-align:right;">اسم الطالب رباعي</th>
+                    <th style="border:1px solid #000000; padding:11px; text-align:center;">المجموعة/الفصل</th>
+                    <th style="border:1px solid #000000; padding:11px; text-align:center; width:100px;">النتيجة الكلية</th>
+                    <th style="border:1px solid #000000; padding:11px; text-align:center;">حالة الاعتماد الرسمية للنتيجة</th>
                 </tr>
             </thead>
             <tbody>`;
@@ -472,11 +476,11 @@ function printResultsPDF() {
 
         htmlContent += `
         <tr>
-            <td style="border:1px solid #111111; padding:10px; text-align:center; font-weight:bold; color:#000;">${rBadge}</td>
-            <td style="border:1px solid #111111; padding:10px; text-align:right; font-weight:bold; color:#000;">${st.name}</td>
-            <td style="border:1px solid #111111; padding:10px; text-align:center; color:#000;">${st.class}</td>
-            <td style="border:1px solid #111111; padding:10px; text-align:center; font-weight:bold; color:${color}; font-size:15px;">${st.score}</td>
-            <td style="border:1px solid #111111; padding:10px; text-align:center; font-size:11px; font-weight:bold; color:${color};">${msg}</td>
+            <td style="border:1px solid #000000; padding:10px; text-align:center; font-weight:bold; color:#000000;">${rBadge}</td>
+            <td style="border:1px solid #000000; padding:10px; text-align:right; font-weight:bold; color:#000000;">${st.name}</td>
+            <td style="border:1px solid #000000; padding:10px; text-align:center; color:#000000;">${st.class}</td>
+            <td style="border:1px solid #000000; padding:10px; text-align:center; font-weight:bold; color:${color}; font-size:15px;">${st.score}</td>
+            <td style="border:1px solid #000000; padding:10px; text-align:center; font-size:11px; font-weight:bold; color:${color};">${msg}</td>
         </tr>`;
     });
     
@@ -485,10 +489,10 @@ function printResultsPDF() {
         </table>
         <div style="display:flex; justify-content:space-between; margin-top:60px; align-items:center;">
             <div>
-                <p style="margin:0; font-size:14px; color:#000;">التوقيع الإلكتروني للمدير المسؤول:</p>
-                <p style="margin:5px 0 0 0; font-weight:900; color:#0a192f; font-size:16px;">م/ عمرو شوشة</p>
+                <p style="margin:0; font-size:14px; color:#000000;">التوقيع الإلكتروني للمدير المسؤول:</p>
+                <p style="margin:5px 0 0 0; font-weight:900; color:#000000; font-size:16px;">م/ عمرو شوشة</p>
             </div>
-            <div style="border:4px double red; color:red; padding:12px 22px; font-weight:900; font-size:13px; text-align:center; border-radius:8px; line-height:1.5; background:#fff5f5;">
+            <div style="border:2px double red; color:red; padding:12px 22px; font-weight:900; font-size:13px; text-align:center; border-radius:8px; line-height:1.5; background:#fff5f5;">
                 👑 مَنصة Amr Group المعتمدة<br>مُختوم ومُصدق إلكترونياً وصادر بأمان كلي<br>OFFICIAL VERIFIED STAMP
             </div>
         </div>
@@ -506,8 +510,8 @@ function printResultsPDF() {
     };
     
     html2pdf().set(opt).from(tempContainer).save().then(() => {
-        document.body.removeChild(tempContainer); // تدمير وحذف الحاوية فوراً بعد سحب الـ PDF بنجاح
-        alert("✅ تَم استخراج كشف بيان الدرجات النهائي وتنزيله فوراً بالبيانات كاملة في جهازك!");
+        document.body.removeChild(tempContainer); 
+        alert("✅ تَم استخراج كشف الدرجات بنجاح تال بالبيانات كاملاً!");
     });
 }
 
