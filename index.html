@@ -22,8 +22,12 @@
 body { 
     font-family: 'Cairo', sans-serif; background: var(--bg); color: var(--txt); 
     margin: 0; padding: 0; transition: 0.3s; line-height: 1.6; zoom: 1;
-    -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none;
     overflow-x: hidden;
+}
+
+/* حماية شاشة الامتحان فقط من النسخ والسرقة والسماح للأدمن بالنسخ واللصق */
+.no-select {
+    -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none;
 }
 
 header { 
@@ -102,7 +106,8 @@ th { background: #0a192f; color: #64ffda; }
 .badge-cheat { background: #f53b57; color: #fff; padding: 4px 8px; border-radius: 6px; font-weight: 800; font-size: 12px; display: inline-block; animation: blink 1s infinite; }
 @keyframes blink { 50% { opacity: 0.5; } }
 
-/* كود مخصص لمنع أي تشويه أثناء الطباعة الرسمية للجهاز */
+.success-checkmark { width: 80px; height: 80px; margin: 0 auto 20px; background: #10b981; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 40px; box-shadow: 0 0 20px rgba(16, 185, 129, 0.4); }
+
 @media print {
     body * { visibility: hidden; }
     #print-section, #print-section * { visibility: visible; }
@@ -126,6 +131,22 @@ th { background: #0a192f; color: #64ffda; }
 </header>
 
 <div>
+  <div id="maintenance-screen" class="card" style="display:none; text-align: center; margin-top: 15vh; border-color: #f53b57;">
+    <div style="font-size: 50px; margin-bottom: 10px;">⚙️</div>
+    <h1 style="color:#f53b57; font-size: 28px; font-weight: 900;">المنصة في وضع التحديث الآن</h1>
+    <p id="maintenance-msg" style="color: var(--txt); font-size: 16px; margin-top: 15px;"></p>
+  </div>
+
+  <div id="submitted-screen" class="card" style="display:none; text-align: center; margin-top: 12vh; border-color: #10b981;">
+    <div class="success-checkmark">✓</div>
+    <h1 style="color:#10b981; font-size: 28px; font-weight: 900;">تم تسليم الاختبار بنجاح</h1>
+    <p style="color: var(--gray); font-size: 16px; margin-top: 10px;">عذراً، لقد قمت بالإجابة على هذا الاختبار مسبقاً وتثبيت بياناتك بالسيرفر.</p>
+    <div style="background: rgba(16, 185, 129, 0.05); padding: 15px; border-radius: 8px; margin-top: 20px; color: var(--txt);">
+        الاسم: <span id="sub-name" style="font-weight:bold;"></span><br>
+        المجموعة: <span id="sub-class" style="font-weight:bold;"></span>
+    </div>
+  </div>
+
   <div id="login-screen" class="card" style="text-align: center; margin-top: 5vh;">
     <h1 style="color:var(--s); font-size: 32px; font-weight: 900; margin-bottom: 5px;">Amr Group</h1>
     <p style="color: var(--gray); margin-bottom: 25px; font-size: 15px;">البوابة الرسمية للاختبارات المهنية المعتمدة</p>
@@ -133,7 +154,7 @@ th { background: #0a192f; color: #64ffda; }
     <button class="btn btn-main" style="width:100%; padding:16px; margin-top: 15px; font-size: 16px;" onclick="studentLogin()">التحقق من الكود ودخول المنصة</button>
   </div>
 
-  <div id="exam-screen" style="display:none; padding: 0 2%;">
+  <div id="exam-screen" class="no-select" style="display:none; padding: 0 2%;">
     <div id="student-bar" class="card" style="display:flex; justify-content:space-around; border-color:var(--s); flex-wrap: wrap; font-size: 14px; gap: 5px; padding: 15px;">
         <span id="st-name"></span> | <span id="st-class"></span> | <span id="st-subject"></span> | <b id="timer-display" style="color:var(--s); font-size: 16px;">00:00</b>
     </div>
@@ -180,6 +201,15 @@ th { background: #0a192f; color: #64ffda; }
       <h1 style="color: var(--s); margin: 0; font-size: 22px;">🎛️ لوحة القيادة العامة | Amr Group</h1>
       <button class="btn btn-danger" onclick="closeAdmin()">إغلاق اللوحة ✖</button>
   </div>
+
+  <div class="card" style="border-color: #f53b57;">
+    <h3 style="color: #f53b57;">🚧 نظام قفل وتحديث المنصة الفوري</h3>
+    <textarea id="adm-maintenance-text" placeholder="اكتب هنا الرسالة التي تظهر للطلاب عند قفل المنصة للتحديث..." style="height: 60px; text-align: right;"></textarea>
+    <div style="display: flex; gap: 10px;">
+        <button class="btn btn-danger" onclick="setMaintenance(true)" style="flex: 1;">تفعيل وضع صيانة المنصة وقفلها فوراً 🔒</button>
+        <button class="btn btn-main" onclick="setMaintenance(false)" style="flex: 1; background: #10b981; box-shadow: 0 4px 0 #059669;">إلغاء الصيانة وتشغيل المنصة تلقائياً 🔓</button>
+    </div>
+  </div>
   
   <div class="card">
     <h3>⚙️ إدارة محتوى وبيانات الاختبار</h3>
@@ -198,10 +228,10 @@ th { background: #0a192f; color: #64ffda; }
   </div>
 
   <div class="card">
-    <h3>🔄 التقارير والتحديثات الكبرى (تنزيل ملفات PDF المباشرة والمليئة بالبيانات)</h3>
+    <h3>🔄 التقارير والتحديثات الكبرى</h3>
     <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 5px;">
-        <button class="btn btn-main" style="background: #a855f7; color: #fff;" onclick="renewAllCodesPDF()">🔄 تحديث أكواد الطلاب وتنزيل كشف الأكواد الجديد (PDF) 📥</button>
-        <button class="btn btn-main" style="background: #3b82f6; color: #fff;" onclick="printResultsPDF()">📜 تنزيل تقرير نتائج الطلاب والدرجات الحالي (PDF) 📥</button>
+        <button class="btn btn-main" style="background: #a855f7; color: #fff;" onclick="renewAllCodesPDF()">🔄 تحديث أكواد الطلاب وتنزيل كشف الأكواد (PDF) 📥</button>
+        <button class="btn btn-main" style="background: #3b82f6; color: #fff;" onclick="printResultsPDF()">📜 تنزيل تقرير نتائج الطلاب والدرجات (PDF) 📥</button>
         <button class="btn btn-danger" onclick="clearAllResults()">🗑️ تصفير ومسح جميع نتائج الطلاب</button>
         <button class="btn btn-danger" onclick="clearAllStudents()">🚨 حذف جميع كشوف الطلاب المقيدين</button>
     </div>
@@ -253,6 +283,43 @@ let isCheater = false;
 let globalStudentsObject = {};
 let globalResultsObject = {};
 
+db.ref('shousha/maintenance').on('value', s => {
+    const maintenance = s.val() || { active: false, msg: "" };
+    const mScreen = document.getElementById('maintenance-screen');
+    const lScreen = document.getElementById('login-screen');
+    const eScreen = document.getElementById('exam-screen');
+    const sScreen = document.getElementById('submitted-screen');
+
+    if(maintenance.active && !auth.currentUser) {
+        mScreen.style.display = 'block';
+        document.getElementById('maintenance-msg').innerText = maintenance.msg;
+        lScreen.style.display = 'none';
+        eScreen.style.display = 'none';
+        sScreen.style.display = 'none';
+        if(isExamStarted) { clearInterval(examTimer); isExamStarted = false; }
+    } else {
+        mScreen.style.display = 'none';
+        if(!isExamStarted && sScreen.style.display !== 'block') lScreen.style.display = 'block';
+    }
+});
+
+function setMaintenance(status) {
+    const msg = document.getElementById('adm-maintenance-text').value.trim() || "المنصة مغلقة لإجراء تحديثات دورية، سنعود للعمل قريباً.";
+    if(status) {
+        if(confirm("هل تريد قفل المنصة فوراً عن الطلاب وعرض رسالة الصيانة؟")) {
+            db.ref('shousha/maintenance').set({ active: true, msg: msg });
+        }
+    } else {
+        const pass = prompt("الرجاء إدخال كود الماستر السري لفتح المنصة:");
+        if(pass === "15102009") {
+            db.ref('shousha/maintenance').set({ active: false, msg: "" })
+            .then(() => alert("تم إلغاء وضع الصيانة بنجاح وإعادة المنصة للعمل التلقائي."));
+        } else {
+            alert("الباسورد غير صحيح! فشل إلغاء وضع الصيانة.");
+        }
+    }
+}
+
 function zoom(val) { 
     if(val > 1) currentZoom += 0.05; else currentZoom -= 0.05;
     document.body.style.zoom = currentZoom;
@@ -282,12 +349,13 @@ window.openAdmin = function() {
     auth.signInWithEmailAndPassword(email, password)
     .then(() => {
         document.getElementById('admin-panel').style.display = 'block'; 
+        document.getElementById('maintenance-screen').style.display = 'none';
         loadAdminData();
     })
     .catch(() => alert("بيانات دخول خاطئة!"));
 }
 
-function closeAdmin() { auth.signOut().then(() => { document.getElementById('admin-panel').style.display = 'none'; }); }
+function closeAdmin() { auth.signOut().then(() => { document.getElementById('admin-panel').style.display = 'none'; location.reload(); }); }
 
 function loadAdminData() {
     db.ref('shousha/mapping').on('value', s => {
@@ -322,6 +390,14 @@ function loadAdminData() {
             if(s.val().subject) document.getElementById('adm-subject').value = s.val().subject;
             if(s.val().time) document.getElementById('adm-time').value = s.val().time;
             if(s.val().notice) document.getElementById('adm-notice').value = s.val().notice;
+            if(s.val().maintenanceText) document.getElementById('adm-maintenance-text').value = s.val().maintenanceText;
+            if(s.val().qs) {
+                let txt = "";
+                s.val().qs.forEach(q => {
+                    txt += `${q.text}|${q.opts[0]}|${q.opts[1]}|${q.opts[2]}|${q.opts[3]}|${q.correct}\n`;
+                });
+                document.getElementById('adm-questions').value = txt;
+            }
         }
     });
 }
@@ -334,7 +410,7 @@ function addNewStudentManual() {
     const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
     let code = "AMR-"; for(let i=0; i<4; i++) code += chars[Math.floor(Math.random()*chars.length)];
     
-    db.ref('shousha/mapping/' + code).set({ name: name, class: cls })
+    db.ref('shousha/mapping/' + code).set({ name: name, class: cls, deviceId: "" })
     .then(() => {
         alert(`تمت إضافة الطالب بنجاح!\nالكود الخاص به: ${code}`);
         document.getElementById('new-student-name').value = '';
@@ -348,7 +424,6 @@ function deleteStudent(code) {
     }
 }
 
-// دالة توليد الأكواد المخصصة للتابلت عبر ميزة طباعة النظام
 function renewAllCodesPDF() {
     if(confirm("هل تريد توليد أكواد جديدة تماماً وفتح نافذة الطباعة (لحفظها كـ PDF)؟")) {
         const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
@@ -363,7 +438,7 @@ function renewAllCodesPDF() {
             do {
                 newCode = "AMR-"; for(let i=0; i<4; i++) newCode += chars[Math.floor(Math.random() * chars.length)];
             } while (newUpdates['shousha/mapping/' + newCode]);
-            newUpdates['shousha/mapping/' + newCode] = { name: st.name, class: st.class };
+            newUpdates['shousha/mapping/' + newCode] = { name: st.name, class: st.class, deviceId: "" };
         });
 
         db.ref('shousha/mapping').set(null).then(() => {
@@ -399,15 +474,13 @@ function renewAllCodesPDF() {
                 });
                 
                 htmlContent += `</tbody></table></div>`;
-                
                 document.getElementById('print-section').innerHTML = htmlContent;
-                window.print(); // تفعيل نافذة طباعة التابلت الرسمية الآمنة 100%
+                window.print();
             });
         });
     }
 }
 
-// دالة طباعة تقرير النتائج المخصصة للتابلت والموبايل
 function printResultsPDF() {
     let arr = []; for(let k in globalResultsObject) { arr.push(globalResultsObject[k]); }
     if(arr.length === 0) { alert("لا توجد نتائج حالياً!"); return; }
@@ -429,7 +502,7 @@ function printResultsPDF() {
                     <th style="border:1px solid #000; padding:10px;">حالة الاعتماد للنتيجة</th>
                 </tr>
             </thead>
-            <tbody>`;
+            <tbody id="print-res-table-body">`;
 
     arr.forEach((st, idx) => {
         let rank = idx + 1; let rBadge = `${rank}`; let msg = "معتمد وموثق بنظام المنصة.";
@@ -449,16 +522,13 @@ function printResultsPDF() {
     });
     
     htmlContent += `</tbody></table></div>`;
-
     document.getElementById('print-section').innerHTML = htmlContent;
-    window.print(); // تفعيل أمر النظام الصريح للطباعة
+    window.print();
 }
 
 function clearAllResults() {
     if(confirm("🚨 تنبيه أمني خطير: هل أنت متأكد تماماً من تصفير ومسح جميع نتائج الطلاب بالكامل؟ لا يمكن التراجع!")) {
-        db.ref('shousha/results').set(null)
-        .then(() => { alert("🚀 تم تصفير ومسح جدول النتائج بنجاح تام."); })
-        .catch((err) => { alert("حدث خطأ: " + err.message); });
+        db.ref('shousha/results').set(null).then(() => { alert("🚀 تم تصفير ومسح جدول النتائج بنجاح تام."); });
     }
 }
 
@@ -474,28 +544,57 @@ function studentLogin() {
     
     db.ref('shousha/mapping/' + code).once('value', s => {
         if(s.exists()) {
-            window.user = s.val();
-            db.ref('shousha/config').once('value', snap => {
-                const conf = snap.val() || {};
-                document.getElementById('notice-text-content').innerText = conf.notice || "تنبيه: يرجى التركيز وعدم مغادرة الصفحة لتفادي القفل التلقائي ورصد مخالفة.";
-                
-                const modal = document.getElementById('notice-modal'); modal.style.display = 'flex';
-                let countdown = 5; const btn = document.getElementById('notice-close-btn'); btn.disabled = true;
-                
-                let timer = setInterval(() => {
-                    countdown--;
-                    if(countdown > 0) btn.innerText = `يرجى الانتظار (${countdown})...`;
-                    else {
-                        clearInterval(timer); btn.innerText = "فهمت التعليمات، ابدأ الامتحان الآن 🚀"; btn.disabled = false;
-                        btn.onclick = function() {
-                            modal.style.display = 'none';
-                            document.getElementById('login-screen').style.display = 'none';
-                            document.getElementById('exam-screen').style.display = 'block';
-                            startExam();
-                        };
-                    }
-                }, 1000);
+            const studentData = s.val();
+            window.user = studentData;
+            window.currentStudentCode = code;
+
+            db.ref('shousha/results/' + studentData.name).once('value', resSnap => {
+                if(resSnap.exists()) {
+                    document.getElementById('login-screen').style.display = 'none';
+                    document.getElementById('sub-name').innerText = studentData.name;
+                    document.getElementById('sub-class').innerText = studentData.class;
+                    document.getElementById('submitted-screen').style.display = 'block';
+                    return;
+                }
+
+                let myDeviceId = localStorage.getItem('amr_group_device_id');
+                if(!myDeviceId) {
+                    myDeviceId = 'DEV-' + Math.random().toString(36).substr(2, 9).toUpperCase();
+                    localStorage.setItem('amr_group_device_id', myDeviceId);
+                }
+
+                if(studentData.deviceId && studentData.deviceId !== "" && studentData.deviceId !== myDeviceId) {
+                    alert("🚨 عذراً، هذا كود مخصص لجهاز آخر بالفعل! لا يمكنك الدخول من جهازين.");
+                    return;
+                }
+
+                if(!studentData.deviceId || studentData.deviceId === "") {
+                    db.ref('shousha/mapping/' + code + '/deviceId').set(myDeviceId);
+                }
+
+                db.ref('shousha/config').once('value', snap => {
+                    const conf = snap.val() || {};
+                    document.getElementById('notice-text-content').innerText = conf.notice || "تنبيه: يرجى التركيز وعدم مغادرة الصفحة لتفادي القفل التلقائي ورصد مخالفة.";
+                    
+                    const modal = document.getElementById('notice-modal'); modal.style.display = 'flex';
+                    let countdown = 5; const btn = document.getElementById('notice-close-btn'); btn.disabled = true;
+                    
+                    let timer = setInterval(() => {
+                        countdown--;
+                        if(countdown > 0) btn.innerText = `يرجى الانتظار (${countdown})...`;
+                        else {
+                            clearInterval(timer); btn.innerText = "فهمت التعليمات، ابدأ الامتحان الآن 🚀"; btn.disabled = false;
+                            btn.onclick = function() {
+                                modal.style.display = 'none';
+                                document.getElementById('login-screen').style.display = 'none';
+                                document.getElementById('exam-screen').style.display = 'block';
+                                startExam();
+                            };
+                        }
+                    }, 1000);
+                });
             });
+
         } else { alert("الكود غير صحيح أو منتهي الصلاحية للاختبار الحالي!"); }
     });
 }
@@ -503,16 +602,22 @@ function studentLogin() {
 function startExam() {
     isExamStarted = true;
     db.ref('shousha/config').once('value', snap => {
-        const conf = snap.val();
+        const conf = snap.val() || { subject: "اختبار عام", time: 30, qs: [] };
         document.getElementById('st-name').innerText = window.user.name;
         document.getElementById('st-class').innerText = window.user.class;
         document.getElementById('st-subject').innerText = conf.subject;
         let html = "";
-        conf.qs.forEach((q, i) => {
-            html += `<div class="q-item"><h3>${i+1}. ${q.text}</h3>${q.opts.map(o => `<label class="option-label"><input type="radio" name="q${i}" value="${o}"> ${o}</label>`).join('')}</div>`;
-        });
+        
+        if(conf.qs && conf.qs.length > 0) {
+            conf.qs.forEach((q, i) => {
+                html += `<div class="q-item"><h3>${i+1}. ${q.text}</h3>${q.opts.map(o => `<label class="option-label"><input type="radio" name="q${i}" value="${o}"> ${o}</label>`).join('')}</div>`;
+            });
+        } else {
+            html = "<div class='card'>لا توجد أسئلة مرفوعة حالياً في هذا الاختبار.</div>";
+        }
+        
         document.getElementById('questions-list').innerHTML = html;
-        let time = conf.time * 60; clearInterval(examTimer);
+        let time = (conf.time || 30) * 60; clearInterval(examTimer);
         examTimer = setInterval(() => {
             let m = Math.floor(time/60), s = time%60;
             document.getElementById('timer-display').innerText = `${m}:${s<10?'0':''}${s}`;
@@ -522,57 +627,104 @@ function startExam() {
 }
 
 function submitExam() {
-    if(!isExamStarted) return; isExamStarted = false; clearInterval(examTimer);
+    if(!isExamStarted) return;
+    clearInterval(examTimer);
+    isExamStarted = false;
+
     db.ref('shousha/config').once('value', snap => {
-        const conf = snap.val(); let score = 0;
-        conf.qs.forEach((q, i) => {
-            const sel = document.querySelector(`input[name="q${i}"]:checked`);
-            if(sel && sel.value.trim() === q.correct.trim()) score++;
+        const conf = snap.val() || { qs: [] };
+        let totalScore = 0;
+        let totalQuestions = conf.qs ? conf.qs.length : 0;
+
+        if(totalQuestions > 0) {
+            conf.qs.forEach((q, i) => {
+                const selected = document.querySelector(`input[name="q${i}"]:checked`);
+                if (selected && selected.value === q.correct) {
+                    totalScore += 20;
+                }
+            });
+        }
+
+        const now = new Date();
+        const timeString = `${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}`;
+
+        const resultData = {
+            name: window.user.name,
+            class: window.user.class,
+            score: `${totalScore}/${totalQuestions * 20}`,
+            time: timeString,
+            cheat: isCheater
+        };
+
+        db.ref('shousha/results/' + window.user.name).set(resultData)
+        .then(() => {
+            document.getElementById('exam-screen').style.display = 'none';
+            document.getElementById('sub-name').innerText = window.user.name;
+            document.getElementById('sub-class').innerText = window.user.class;
+            document.getElementById('submitted-screen').style.display = 'block';
+            alert("تم إرسال وحفظ إجاباتك بنجاح في السيرفر! 🎉");
+        }).catch(() => {
+            alert("حدث خطأ أثناء حفظ الإجابات، يرجى المحاولة مرة أخرى.");
+            isExamStarted = true;
         });
-        
-        db.ref('shousha/results/' + window.user.name).set({
-            name: window.user.name, class: window.user.class, 
-            score: score + "/" + conf.qs.length, time: new Date().toLocaleTimeString(), cheat: isCheater
-        }).then(() => { 
-            alert(isCheater ? "تم تسليم الامتحان تلقائياً ورصد مخالفة أمنية غش." : "تم حفظ إجاباتك واحتساب الدرجة الكلية بنجاح."); 
-            location.reload(); 
-        }).catch(() => location.reload());
     });
 }
 
 function updateExam() {
-    const sub = document.getElementById('adm-subject').value;
-    const time = document.getElementById('adm-time').value;
-    const notice = document.getElementById('adm-notice').value;
-    const qsData = document.getElementById('adm-questions').value.trim();
-    
-    if(!sub || !time || !qsData) { alert("يرجى ملء جميع حقول المادة والوقت والأسئلة!"); return; }
-    
-    const lines = qsData.split('\n').filter(l => l.trim() !== "" && l.includes('|'));
-    const qs = lines.map(l => { 
-        const p = l.split('|'); 
-        return { text: p[0], opts: [p[1], p[2], p[3], p[4]], correct: p[5] }; 
-    });
-    
-    if(qs.length === 0){ alert("صيغة الأسئلة المكتوبة غير صحيحة!"); return; }
+    const subject = document.getElementById('adm-subject').value.trim();
+    const time = parseInt(document.getElementById('adm-time').value) || 30;
+    const notice = document.getElementById('adm-notice').value.trim();
+    const maintenanceText = document.getElementById('adm-maintenance-text').value.trim();
+    const rawQuestions = document.getElementById('adm-questions').value.trim();
 
-    db.ref('shousha/config').set({ subject: sub, time: time, notice: notice, qs: qs })
-    .then(() => alert("تم تحديث السيرفر المعتمد وحفظ الأسئلة بنجاح!"))
-    .catch(() => alert("فشل الاتصال بقاعدة البيانات."));
+    if (!subject || !rawQuestions) {
+        alert("يرجى إدخال اسم المادة وصيغة الأسئلة على الأقل!");
+        return;
+    }
+
+    const lines = rawQuestions.split(/\r?\n/).filter(line => line.trim() !== "");
+    const formattedQuestions = [];
+
+    try {
+        lines.forEach(line => {
+            const parts = line.split('|');
+            if (parts.length < 6) throw new Error("صيغة أحد الأسطر غير كاملة أو ناقصة علامات |");
+            
+            formattedQuestions.push({
+                text: parts[0].trim(),
+                opts: [parts[1].trim(), parts[2].trim(), parts[3].trim(), parts[4].trim()],
+                correct: parts[5].trim()
+            });
+        });
+
+        const updateData = {
+            subject: subject,
+            time: time,
+            notice: notice,
+            maintenanceText: maintenanceText,
+            qs: formattedQuestions
+        };
+
+        db.ref('shousha/config').set(updateData)
+        .then(() => {
+            alert("✅ تم حفظ وتحديث نظام الاختبار والتعليمات بنجاح في السيرفر!");
+        }).catch(() => {
+            alert("❌ فشل الاتصال بالسيرفر أثناء الحفظ.");
+        });
+
+    } catch (err) {
+        alert("❌ خطأ في تنسيق الأسئلة: " + err.message);
+    }
 }
-
-document.addEventListener('contextmenu', e => e.preventDefault());
-document.addEventListener('copy', e => e.preventDefault());
-document.addEventListener('paste', e => e.preventDefault());
-document.addEventListener('keydown', e => { if (e.ctrlKey && ['c', 'v', 'u', 's', 'p', 'i'].includes(e.key)) { e.preventDefault(); alert("الإجراء محظور لحماية سرية الاختبار!"); } });
 
 document.addEventListener('visibilitychange', () => {
     if (document.visibilityState === 'hidden' && isExamStarted) {
-        cheatAttempts++; isCheater = true;
-        if (cheatAttempts >= 2) {
-            alert("لقد غادرت نافذة الاختبار مرتين! تم قفل الامتحان وإرسال ورقتك فوراً بعلامة غش مُسجلة.");
-            submitExam();
-        } else { alert("⚠️ تحذير صارم: ممنوع فتح نوافذ أخرى. تكرار المخالفة سيلغي امتحانك فوراً!"); }
+        cheatAttempts++;
+        alert(`🚨 تنبيه أمني: يرجى عدم مغادرة صفحة الامتحان! المحاولة رقم (${cheatAttempts})`);
+        if (cheatAttempts >= 3) {
+            isCheater = true;
+            alert("⚠️ تم رصد محاولات غش متكررة وسيتم تسجيل النتيجة كـ 'مخالفة أمنية' للأدمن.");
+        }
     }
 });
 </script>
